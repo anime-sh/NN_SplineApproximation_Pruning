@@ -1,0 +1,31 @@
+$ python cnn.py
+Global seed set to 42
+│/home/miniconda3/envs/btp/lib/python3.10/site-packages/torch/functional.py:504: Us
+│erWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing a
+│rgument. (Triggered internally at /opt/conda/conda-bld/pytorch_1670525552843/work/aten/src/AT
+│en/native/TensorShape.cpp:3190.)
+│  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+│Epoch 0, model_name='No pruning' Val acc = 0.9397
+│Epoch 0, model_name='20% pruning' Val acc = 0.9358
+│Epoch 0, model_name='40% pruning' Val acc = 0.9182
+│Epoch 0, model_name='60% pruning' Val acc = 0.945
+│Epoch 5, model_name='No pruning' Val acc = 0.9611
+│Epoch 5, model_name='20% pruning' Val acc = 0.9638
+│Epoch 5, model_name='40% pruning' Val acc = 0.9623
+│Epoch 5, model_name='60% pruning' Val acc = 0.9552
+│Epoch 10, model_name='No pruning' Val acc = 0.9685
+│Epoch 10, model_name='20% pruning' Val acc = 0.9654
+│Epoch 10, model_name='40% pruning' Val acc = 0.9527
+│Epoch 10, model_name='60% pruning' Val acc = 0.8274
+│Epoch 15, model_name='No pruning' Val acc = 0.9705
+│Epoch 15, model_name='20% pruning' Val acc = 0.9699
+│Epoch 15, model_name='40% pruning' Val acc = 0.9259
+│Epoch 15, model_name='60% pruning' Val acc = 0.5478
+│Epoch 20, model_name='No pruning' Val acc = 0.9699
+│Epoch 20, model_name='20% pruning' Val acc = 0.9647
+│Epoch 20, model_name='40% pruning' Val acc = 0.7979
+│Epoch 20, model_name='60% pruning' Val acc = 0.2337
+│Epoch 24, model_name='No pruning' Val acc = 0.9728
+│Epoch 24, model_name='20% pruning' Val acc = 0.9672
+│Epoch 24, model_name='40% pruning' Val acc = 0.8181
+│Epoch 24, model_name='60% pruning' Val acc = 0.2371

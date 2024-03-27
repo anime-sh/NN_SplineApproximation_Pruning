@@ -6,19 +6,19 @@
             "pruning_level": 0
         },
         {
-            "name": "10% pruning",
-            "pruning_strategy": "l1_unstructured",
-            "pruning_level": 0.1
-        },
-        {
             "name": "20% pruning",
             "pruning_strategy": "l1_unstructured",
             "pruning_level": 0.2
         },
         {
-            "name": "30% pruning",
+            "name": "40% pruning",
             "pruning_strategy": "l1_unstructured",
-            "pruning_level": 0.3
+            "pruning_level": 0.4
+        },
+        {
+            "name": "60% pruning",
+            "pruning_strategy": "l1_unstructured",
+            "pruning_level": 0.6
         }
     ]
 }

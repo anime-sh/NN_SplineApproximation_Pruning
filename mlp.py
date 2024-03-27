@@ -6,8 +6,10 @@ import torch.nn.functional as F
 from sklearn.datasets import make_blobs
 import torch.nn.utils.prune as prune
 import json
+import copy
+from pytorch_lightning import seed_everything
 
-torch.manual_seed(42)
+seed_everything(42)
 
 
 class MLP(nn.Module):
@@ -30,6 +32,26 @@ def prune_model(model, pruning_strategy, amount=0.3):
     return model
 
 
+def prune_model_lth(model, init_state_dict, pruning_level):
+    sorted_weights = np.sort(
+        np.abs(
+            torch.cat([param.flatten() for param in model.parameters()])
+            .detach()
+            .numpy()
+        )
+    )
+    threshold = sorted_weights[int(np.floor(len(sorted_weights) * pruning_level))]
+    for param in model.parameters():
+        mask = torch.abs(param) > threshold
+        param.data *= mask.float()
+
+    for name, param in model.named_parameters():
+        init_weight = init_state_dict[name]
+        refill_mask = param.data == 0
+        param.data[refill_mask] = init_weight[refill_mask]
+    return model
+
+
 X_train, y_train = make_blobs(n_samples=500, n_features=2, centers=3)
 X_train = torch.tensor(X_train, dtype=torch.float32)
 y_train = torch.tensor(y_train, dtype=torch.int64)
@@ -39,9 +61,11 @@ with open("config.json") as f:
 
 models = []
 model_names = []
+model_init_states = []
 for model in model_specs:
     model_names.append(model["name"])
-    models.append(prune_model(MLP(), model["pruning_strategy"], model["pruning_level"]))
+    models.append(MLP())
+    model_init_states.append(copy.deepcopy(models[-1].state_dict()))
 
 num_models = len(models)
 optimizers = [optim.SGD(model.parameters(), lr=0.1) for model in models]
@@ -57,6 +81,17 @@ x_grid_torch = torch.tensor(x_grid, dtype=torch.float32)
 
 epochs = 100
 for epoch in range(epochs):
+    if epoch % 10 == 9:
+        for i, spec in enumerate(model_specs):
+            if spec["pruning_strategy"] == "lth":
+                models[i] = prune_model_lth(
+                    models[i], model_init_states[i], spec["pruning_level"]
+                )
+            else:
+                models[i] = prune_model(
+                    models[i], spec["pruning_strategy"], spec["pruning_level"]
+                )
+
     for model, optimizer in zip(models, optimizers):
         _, y_hat = model(X_train)
         loss = criterion(y_hat, y_train)
@@ -104,5 +139,5 @@ for epoch in range(epochs):
         for ax in axs[num_models, :-1].flatten():
             ax.axis("off")
         plt.tight_layout()
-        plt.savefig(f"plt/mlp/synthetic/l1_{epoch}.png")
+        plt.savefig(f"plt/mlp/synthetic/l1_1_retrain_small_prune_{epoch}.png")
         plt.close(fig)
