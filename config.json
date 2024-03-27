@@ -1,0 +1,24 @@
+{
+    "models": [
+        {
+            "name": "No pruning",
+            "pruning_strategy": "l1_unstructured",
+            "pruning_level": 0
+        },
+        {
+            "name": "30% pruning",
+            "pruning_strategy": "l1_unstructured",
+            "pruning_level": 0.3
+        },
+        {
+            "name": "60% pruning",
+            "pruning_strategy": "l1_unstructured",
+            "pruning_level": 0.6
+        },
+        {
+            "name": "90% pruning",
+            "pruning_strategy": "l1_unstructured",
+            "pruning_level": 0.9
+        }
+    ]
+}
